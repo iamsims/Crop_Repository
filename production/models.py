@@ -27,3 +27,5 @@ class Production(models.Model):
     crop = models.ForeignKey(Crop,on_delete=models.CASCADE)
     district = models.ForeignKey(District,on_delete=models.CASCADE)
     year = models.IntegerField( choices=year_choices())
+    def __str__(self):
+        return self.crop
