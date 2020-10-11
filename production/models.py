@@ -29,4 +29,4 @@ class Production(models.Model):
     year = models.IntegerField( choices=year_choices())
 
     def __str__(self):
-        return str(self.id)
+        return self.crop
