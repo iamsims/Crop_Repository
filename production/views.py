@@ -6,6 +6,7 @@ def home(request):
     context ={
         'posts' : Production.objects.all(),
     }
+    
     return render(request, 'production/home.html', context)
 # Create your views here.
 

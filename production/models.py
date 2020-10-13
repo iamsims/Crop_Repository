@@ -17,7 +17,7 @@ class Crop(models.Model):
 
 class District(models.Model):
     name = models.CharField(max_length=15, unique=True)
-    region = models.CharField(max_length=15)
+    area = models.FloatField()
     pradesh_no = models.IntegerField()
 
     def __str__(self):
@@ -29,4 +29,4 @@ class Production(models.Model):
     year = models.IntegerField( choices=year_choices())
 
     def __str__(self):
-        return self.crop
+        return self.crop.name

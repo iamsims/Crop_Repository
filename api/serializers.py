@@ -9,7 +9,7 @@ class productionSerializer(serializers.HyperlinkedModelSerializer):
 class districtSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = District
-    fields = ('name','region','pradesh_no')
+    fields = ('name','area','pradesh_no')
   
 class cropSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
