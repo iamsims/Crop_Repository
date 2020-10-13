@@ -1,17 +1,18 @@
 from rest_framework import serializers
 from production.models import District,Production,Crop
 
-class productionSerializer(serializers.HyperlinkedModelSerializer):
+class productionSerializer(serializers.ModelSerializer):
+  # crop = serializers.StringRelatedField(many = False)
   class Meta:
     model = Production
-    fields = ('crops','district','year')
+    fields = '__all__'
   
-class districtSerializer(serializers.HyperlinkedModelSerializer):
+class districtSerializer(serializers.ModelSerializer):
   class Meta:
     model = District
-    fields = ('name','area','pradesh_no')
+    fields = '__all__'
   
-class cropSerializer(serializers.HyperlinkedModelSerializer):
+class cropSerializer(serializers.ModelSerializer):
   class Meta:
     model = Crop
-    fields = ('name','crop_type')
+    fields = '__all__'
