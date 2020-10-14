@@ -8,15 +8,14 @@ def year_choices():
     return list(zip(actual_value, readable_form))
 
 class Crop(models.Model):
-    name = models.CharField(max_length=15,  unique=True)
-    crop_type = models.CharField(max_length=10)
+    name = models.CharField(max_length=20,  unique=True)
+    crop_type = models.CharField(max_length=15)
 
     def __str__(self):
         return self.name
     
-
 class District(models.Model):
-    name = models.CharField(max_length=15, unique=True)
+    name = models.CharField(max_length=20, unique=True)
     area = models.FloatField()
     pradesh_no = models.IntegerField()
 
@@ -27,6 +26,8 @@ class Production(models.Model):
     crop = models.ForeignKey(Crop,on_delete=models.CASCADE)
     district = models.ForeignKey(District,on_delete=models.CASCADE)
     year = models.IntegerField( choices=year_choices())
-
+    amount =models.FloatField()
+    harvest_area =models.FloatField(null=True)
+    
     def __str__(self):
         return self.crop.name
