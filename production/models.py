@@ -30,4 +30,4 @@ class Production(models.Model):
     harvest_area =models.FloatField(null=True)
     
     def __str__(self):
-        return self.crop.name
+        return self.crop.name + " " + self.district.name + " " + str(self.year)
