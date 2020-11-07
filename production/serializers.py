@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from production.models import District,Production,Crop
+from .models import District,Production,Crop
 
 class productionSerializer(serializers.ModelSerializer):
   # crop = serializers.StringRelatedField(many = False)

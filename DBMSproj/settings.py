@@ -42,10 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,6 +74,35 @@ TEMPLATES = [
     },
 ]
 
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3000',     
+#     'http://localhost:8000',
+#     'http://localhost:8080',
+# ]
+
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'content-type'
+    'x-requested-with',
+]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:9000"
+]
+
+CSRF_TRUSTED_ORIGINS=[
+   "localhost:3000",
+    "http://127.0.0.1:9000" 
+]
+
 WSGI_APPLICATION = 'DBMSproj.wsgi.application'
 
 
@@ -98,7 +128,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.AllowAny'
     ]
 }
 
