@@ -24,11 +24,10 @@ class cropSerializer(serializers.ModelSerializer):
     fields = "__all__"
 
 
-class productionSerializer(models.Model):
+class productionSerializer(serializers.ModelSerializer):
 
-  crop_name = models.CharField(max_length=20)
-  district_name = models.CharField(max_length=20)
-  year = models.IntegerField()
-  amount =models.FloatField()
-  harvest_area =models.FloatField()
+  class Meta:
+    model = Production
+    #fields = ['name','crops']
+    fields = "__all__"
 

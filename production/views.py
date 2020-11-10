@@ -79,4 +79,25 @@ class ProductionView(APIView):
         
         return HttpResponse(json.dumps(result),content_type="application/json")
         
-    
+    def post(self,request):
+        distname = request.data["district"]
+        cropname = request.data["crop"]
+        cursor = connection.cursor()
+        print("SELECT id FROM production_crop p WHERE p.name='{0}'".format(cropname))
+        crop_id = cursor.execute("SELECT id FROM production_crop p WHERE p.name='{0}'".format(cropname))
+        district_id = cursor.execute("SELECT id FROM production_district p WHERE p.name='{0}'".format(distname))
+        print(crop_id)
+        print(district_id)
+        # crop_id = Crop.objects.get()
+        data = {
+            "crop_id" : crop_id,
+            "district_id" : district_id,
+            "year" : request.data["year"],
+            "harvest_area": request.data["harvest_area"],
+            "amount":request.data["amount"]
+        }
+        serializer = productionSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            production_saved = serializer.save()
+            print(production_saved)
+        return Response(serializer.data)
