@@ -69,35 +69,79 @@ class ProductionView(APIView):
 
     def get(self,request):
         cursor = connection.cursor()
-        cursor.execute("SELECT p.year, p.amount, p.harvest_area, c.name, d.name FROM  production_district d INNER JOIN production_production p ON d.id=p.district_id INNER JOIN production_crop c ON c.id=p.crop_id")
+        cursor.execute("SELECT p.id, p.year, p.amount, p.harvest_area, c.name, d.name FROM  production_district d INNER JOIN production_production p ON d.id=p.district_id INNER JOIN production_crop c ON c.id=p.crop_id")
         rows = cursor.fetchall()
-        keys = ('year','amount','harvest_area','crop_name','district_name')
+        keys = ('id','year','amount','harvest_area','crop_name','district_name')
         result =[]
         for row in rows:
             result.append(dict(zip(keys,row)))
         json_data = json.dumps(result)
         
         return HttpResponse(json.dumps(result),content_type="application/json")
-        
+
+    # def get(self,request,pk):
+    #     print('view found')
+    #     prod = Production.objects.get(pk = pk)
+    #     serializer = productionSerializer(prod)
+    #     return Response(serializer.data) 
+
     def post(self,request):
-        distname = request.data["district"]
-        cropname = request.data["crop"]
-        cursor = connection.cursor()
-        print("SELECT id FROM production_crop p WHERE p.name='{0}'".format(cropname))
-        crop_id = cursor.execute("SELECT id FROM production_crop p WHERE p.name='{0}'".format(cropname))
-        district_id = cursor.execute("SELECT id FROM production_district p WHERE p.name='{0}'".format(distname))
-        print(crop_id)
-        print(district_id)
+        distname = request.data["district_name"]
+        cropname = request.data["crop_name"]
+        # cursor = connection.cursor()
+        # print("SELECT id FROM production_crop p WHERE p.name='{0}';".format(cropname))
+        # crop_id = cursor.execute("SELECT id FROM production_crop p WHERE p.name='Wheat';")
+        # district_id = cursor.execute("SELECT id FROM production_district p WHERE p.name='Illam';")
+        crop= Crop.objects.get(name = cropname)
+        district= District.objects.get(name = distname)
+        
+        print(crop.id)
+        print(district.id)
         # crop_id = Crop.objects.get()
         data = {
-            "crop_id" : crop_id,
-            "district_id" : district_id,
+            "crop" : crop.id,
+            "district" : district.id,
             "year" : request.data["year"],
             "harvest_area": request.data["harvest_area"],
             "amount":request.data["amount"]
         }
         serializer = productionSerializer(data=data)
+        # print(serializer)
         if serializer.is_valid(raise_exception=True):
             production_saved = serializer.save()
             print(production_saved)
+        # serializer = prodSerializer(data=request.data,context={'request':{'crop_name':cropname,'district_name':distname}})
+        
+        # if serializer.is_valid():
+        #     print(serializer.data)
+        #     return Response(serializer.data)
+        keys = ('year','amount','harvest_area','crop_name','district_name')
+        return HttpResponse(json.dumps(request.data),content_type="application/json")
+
+    def delete(self,request,pk):
+        # print('delete found')
+        prod = Production.objects.get(pk=pk)
+        here = prod
+        prod.delete()
+        serializer = productionSerializer(here)
         return Response(serializer.data)
+
+    def put(self,request,pk):
+        
+        distname = request.data["district_name"]
+        cropname = request.data["crop_name"]
+        crop= Crop.objects.get(name = cropname)
+        district= District.objects.get(name = distname)
+        data = {
+            "crop" : crop.id,
+            "district" : district.id,
+            "year" : request.data["year"],
+            "harvest_area": request.data["harvest_area"],
+            "amount":request.data["amount"]
+        }
+        print(request.data)
+        production = Production.objects.get(pk = pk)
+        serializer = productionSerializer(production,data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return HttpResponse(json.dumps(request.data),content_type="application/json")

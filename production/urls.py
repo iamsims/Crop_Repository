@@ -8,4 +8,5 @@ urlpatterns = [
     path('crop/<int:pk>', CropView.as_view()),
     path('district/', DistrictView.as_view()),
     path('production/',ProductionView.as_view()),
+    path('production/<int:pk>',ProductionView.as_view()),
 ]

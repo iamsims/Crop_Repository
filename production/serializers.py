@@ -31,3 +31,11 @@ class productionSerializer(serializers.ModelSerializer):
     #fields = ['name','crops']
     fields = "__all__"
 
+
+# class prodSerializer(serializers.ModelSerializer):
+
+#   class Meta:
+#     model = Production
+#     #fields = ['name','crops']
+#     fields = ['year','amount','harvest_area','crop_name']
+    
