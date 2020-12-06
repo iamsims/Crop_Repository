@@ -10,6 +10,7 @@ def year_choices():
 class Crop(models.Model):
     name = models.CharField(max_length=20,  unique=True)
     crop_type = models.CharField(max_length=15)
+    image = models.ImageField(upload_to = 'images/', null = True)
 
     def __str__(self):
         return self.name
@@ -28,6 +29,8 @@ class Production(models.Model):
     year = models.IntegerField( choices=year_choices())
     amount =models.FloatField()
     harvest_area =models.FloatField(null=True)
+    ph_value = models.FloatField(null=True)
+    climate = models.FloatField(null=True)
     
     def __str__(self):
         return self.crop.name + " " + self.district.name + " " + str(self.year)

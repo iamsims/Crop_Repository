@@ -69,9 +69,9 @@ class ProductionView(APIView):
 
     def get(self,request):
         cursor = connection.cursor()
-        cursor.execute("SELECT p.id, p.year, p.amount, p.harvest_area, c.name, d.name FROM  production_district d INNER JOIN production_production p ON d.id=p.district_id INNER JOIN production_crop c ON c.id=p.crop_id")
+        cursor.execute("SELECT p.id, p.year, p.amount, p.harvest_area, p.ph_value, p.climate,c.image, c.name, d.name FROM  production_district d INNER JOIN production_production p ON d.id=p.district_id INNER JOIN production_crop c ON c.id=p.crop_id")
         rows = cursor.fetchall()
-        keys = ('id','year','amount','harvest_area','crop_name','district_name')
+        keys = ('id','year','amount','harvest_area','ph_value','climate','image','crop_name','district_name')
         result =[]
         for row in rows:
             result.append(dict(zip(keys,row)))
@@ -109,21 +109,22 @@ class ProductionView(APIView):
         # print(serializer)
         if serializer.is_valid(raise_exception=True):
             production_saved = serializer.save()
-            print(production_saved)
+            print(production_saved.id)
         # serializer = prodSerializer(data=request.data,context={'request':{'crop_name':cropname,'district_name':distname}})
-        
+        request.data["id"] = production_saved.id
         # if serializer.is_valid():
         #     print(serializer.data)
         #     return Response(serializer.data)
-        keys = ('year','amount','harvest_area','crop_name','district_name')
+        keys = ('id','year','amount','harvest_area','crop_name','district_name')
         return HttpResponse(json.dumps(request.data),content_type="application/json")
 
     def delete(self,request,pk):
         # print('delete found')
         prod = Production.objects.get(pk=pk)
-        here = prod
-        prod.delete()
-        serializer = productionSerializer(here)
+        print(prod)
+        serializer = productionSerializer(prod)
+        here= prod.delete()
+        print(here)
         return Response(serializer.data)
 
     def put(self,request,pk):
