@@ -97,13 +97,16 @@ class ProductionView(APIView):
         
         print(crop.id)
         print(district.id)
+        print(request.data)
         # crop_id = Crop.objects.get()
         data = {
             "crop" : crop.id,
             "district" : district.id,
             "year" : request.data["year"],
             "harvest_area": request.data["harvest_area"],
-            "amount":request.data["amount"]
+            "amount":request.data["amount"],
+            "ph_value":request.data["ph_value"],
+            "climate":request.data["climate"],
         }
         serializer = productionSerializer(data=data)
         # print(serializer)
@@ -115,7 +118,7 @@ class ProductionView(APIView):
         # if serializer.is_valid():
         #     print(serializer.data)
         #     return Response(serializer.data)
-        keys = ('id','year','amount','harvest_area','crop_name','district_name')
+        keys = ('id','year','amount','harvest_area','crop_name','district_name','ph_value','climate')
         return HttpResponse(json.dumps(request.data),content_type="application/json")
 
     def delete(self,request,pk):
@@ -138,7 +141,9 @@ class ProductionView(APIView):
             "district" : district.id,
             "year" : request.data["year"],
             "harvest_area": request.data["harvest_area"],
-            "amount":request.data["amount"]
+            "amount":request.data["amount"],
+            "climate":request.data["climate"],
+            "ph_value":request.data["ph_value"]
         }
         print(request.data)
         production = Production.objects.get(pk = pk)
